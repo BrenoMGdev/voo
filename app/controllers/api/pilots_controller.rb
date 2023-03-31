@@ -1,6 +1,7 @@
 module Api
 	class PilotsController < ApplicationController
 		before_action :set_pilot, only: [:show, :update, :destroy]
+		rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 		
 		def index
 			@pilots = Pilot.all.map{|p| p.to_json }
@@ -22,7 +23,7 @@ module Api
 			if @pilot.save
 				render json: @pilot.to_json, status: :created
 			else
-				render json: @pilot.errors, status: :unprocessable_entity
+				render json: { error: @pilot.errors }, status: :unprocessable_entity
 			end
 		end
 	
@@ -34,11 +35,12 @@ module Api
 			)
 				render json: @pilot.to_json
 			else
-				render json: @pilot.errors, status: :unprocessable_entity
+				render json: { error: @pilot.errors }, status: :unprocessable_entity
 			end
 		end
 	
 		def destroy
+			binding.pry
 			@pilot.destroy
 		end
 	
@@ -49,6 +51,10 @@ module Api
 	
 		def pilot_params
 			params.permit(:nome, :senha, :aeronave)
+		end
+
+		def record_not_found
+			render json: { error: I18n.t('errors.messages.not_found') }, status: :not_found
 		end
 	end
 end
