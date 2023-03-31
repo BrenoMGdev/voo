@@ -1,0 +1,13 @@
+pt:
+  activerecord:
+    models:
+      pilot: Piloto
+    attributes:
+      pilot:
+        name: nome
+        password: senha
+        aircraft: aeronave
+
+  errors:
+    messages:
+      blank: Não pode ficar em branco
