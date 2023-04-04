@@ -4,7 +4,9 @@ class PilotsController < ApplicationController
 
 	# GET All
 	def index
-		render status: :bad_request
+		pilots = Pilot.all.map{|p| p.to_json }
+
+		render json: pilots, status: :ok
 	end
 
 	# GET com ID
@@ -14,11 +16,7 @@ class PilotsController < ApplicationController
 
 	# POST
 	def create
-		@pilot = Pilot.new(
-			name: params[:nome],
-			password: params[:senha],
-			aircraft: params[:aeronave]
-		)
+		@pilot = Pilot.new(Pilot::prepare_params(params))
 
 		if @pilot.save
 			render json: @pilot.to_json, status: :ok
@@ -29,11 +27,7 @@ class PilotsController < ApplicationController
 
 	# PUT e PATCH
 	def update
-		if @pilot.update(
-			name: params[:nome],
-			password: params[:senha],
-			aircraft: params[:aeronave]
-		)
+		if @pilot.update(Pilot::prepare_params(params))
 			render json: @pilot.to_json, status: :ok
 		else
 			render status: :bad_request

@@ -10,8 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_31_015057) do
-  create_table "pilots", force: :cascade do |t|
+ActiveRecord::Schema[7.0].define(version: 2023_04_04_004447) do
+  create_table "pilots", id: :string, force: :cascade do |t|
     t.string "name"
     t.string "password"
     t.string "aircraft"
