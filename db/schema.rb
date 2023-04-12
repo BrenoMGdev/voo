@@ -10,13 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_04_004447) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_12_214425) do
+  create_table "models", id: :string, force: :cascade do |t|
+    t.string "model"
+    t.string "manufacturer"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "pilots", id: :string, force: :cascade do |t|
     t.string "name"
     t.string "password"
-    t.string "aircraft"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "planes", id: :string, force: :cascade do |t|
+    t.integer "pilots_id"
+    t.integer "models_id"
+    t.string "date"
+    t.string "registration"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["models_id"], name: "index_planes_on_models_id"
+    t.index ["pilots_id"], name: "index_planes_on_pilots_id"
   end
 
 end

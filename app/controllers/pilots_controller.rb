@@ -16,9 +16,16 @@ class PilotsController < ApplicationController
 
 	# POST
 	def create
-		@pilot = Pilot.new(Pilot::prepare_params(params))
+		@pilot = Pilot.new({
+            id: params["id"],
+            name: params["name"],
+            password: params["password"],
+			planes: params["planes"]
+        })
 
 		if @pilot.save
+			planes = Plane.find(params["planes"])
+			@pilot.
 			render json: @pilot.to_json, status: :ok
 		else
 			render status: :bad_request
@@ -27,7 +34,11 @@ class PilotsController < ApplicationController
 
 	# PUT e PATCH
 	def update
-		if @pilot.update(Pilot::prepare_params(params))
+		if @pilot.update(Pilot.new({
+            name: params["name"],
+            password: params["password"],
+			planes: params["planes"]
+        }))
 			render json: @pilot.to_json, status: :ok
 		else
 			render status: :bad_request
