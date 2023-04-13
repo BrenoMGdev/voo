@@ -16,30 +16,29 @@ class ModelsController < ApplicationController
 
 	# POST
 	def create
-		print(params)
-		@model = Model.new({
-            id: params["id"],
-            model: params["model"],
-            manufacturer: params["manufacturer"]
-        })
+		@model = Model.new(
+			id: params["id"],
+			model: params["model"],
+			manufacturer: params["manufacturer"]
+		)
 
-		if @model.save
-			render json: @model.to_json, status: :ok
-		else
-			render json: @model.save!.to_json, status: :bad_request
-		end
+		@model.save
+		
+		render json: @model.to_json, status: :ok
+	rescue
+		render status: :bad_request
 	end
 
 	# PUT e PATCH
 	def update
-		if @model.update(Model.new({
-            model: params["model"],
-            manufacturer: params["manufacturer"]
-        }))
-			render json: @model.to_json, status: :ok
-		else
-			render status: :bad_request
-		end
+		@model.update(
+			model: params["model"],
+			manufacturer: params["manufacturer"]
+		)
+
+		render json: @model.to_json, status: :ok
+	rescue
+		render status: :bad_request
 	end
 
 	# DELETE
@@ -61,6 +60,6 @@ class ModelsController < ApplicationController
 	end
 
 	def record_not_found
-		render json: {}, status: :not_found
+		render status: :not_found
 	end
 end

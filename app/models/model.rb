@@ -1,14 +1,18 @@
 class Model < ApplicationRecord
-    # validates_presence_of :model, :manufacturer
+  has_many :plane
 
-    belongs_to :plane
+  validate :id_validation, on: :update
+  validates_presence_of :id, :model, :manufacturer
+  
+  def id_validation
+    self.class.find(self.id).blank?
+  end
 
 	def to_json
-	{
-        id: self.id,
-        model: self.model,
-        manufacturer: self.manufacturer,
+    {
+      id: self.id,
+      model: self.model,
+      manufacturer: self.manufacturer
     }
 	end
-
 end

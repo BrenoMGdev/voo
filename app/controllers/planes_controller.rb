@@ -16,32 +16,33 @@ class PlanesController < ApplicationController
 
 	# POST
 	def create
-		print(params)
-		@plane = Plane.new({
-            id: params["id"],
-            model: params["model"],
-            date: params["date"],
+		@plane = Plane.new(
+			id: params["id"],
+			model_id: params["model_id"],
+			pilot_id: params["pilot_id"],
+			date: params["date"],
 			registration: params["registration"]
-        })
+		)
 
-		if @plane.save
-			render json: @plane.to_json, status: :ok
-		else
-			render status: :bad_request
-		end
+		@plane.save
+		
+		render json: @plane.to_json, status: :ok
+	rescue
+		render status: :bad_request
 	end
 
 	# PUT e PATCH
 	def update
-		if @plane.update(Plane.new({
-            model: params["model"],
-            date: params["date"],
+		@plane.update(
+			model_id: params["model_id"],
+			pilot_id: params["pilot_id"],
+			date: params["date"],
 			registration: params["registration"]
-        }))
-			render json: @plane.to_json, status: :ok
-		else
-			render status: :bad_request
-		end
+    )
+			
+		render json: @plane.to_json, status: :ok
+	rescue
+		render status: :bad_request
 	end
 
 	# DELETE

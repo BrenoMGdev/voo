@@ -26,14 +26,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_12_214425) do
   end
 
   create_table "planes", id: :string, force: :cascade do |t|
-    t.integer "pilots_id"
-    t.integer "models_id"
+    t.string "pilot_id"
+    t.string "model_id"
     t.string "date"
     t.string "registration"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["models_id"], name: "index_planes_on_models_id"
-    t.index ["pilots_id"], name: "index_planes_on_pilots_id"
+    t.index ["model_id"], name: "index_planes_on_model_id"
+    t.index ["pilot_id"], name: "index_planes_on_pilot_id"
   end
 
 end
