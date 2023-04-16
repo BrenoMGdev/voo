@@ -1,18 +1,24 @@
-class Model < ApplicationRecord
-  has_many :plane
+require 'securerandom'
 
-  validate :id_validation, on: :update
-  validates_presence_of :id, :model, :manufacturer
-  
-  def id_validation
-    self.class.find(self.id).blank?
+class Model < ApplicationRecord
+  has_and_belongs_to_many :pilot
+  has_many :planes
+
+  validates_presence_of :description, :manufacturer
+
+  before_create :set_id
+
+  def set_id
+    self.id = SecureRandom.uuid
   end
 
-	def to_json
+  def dto_json
+    serializer = ActiveModelSerializers::SerializableResource.new(self, each_serializer: ModelSerializer).as_json
+
     {
-      id: self.id,
-      model: self.model,
-      manufacturer: self.manufacturer
-    }
-	end
+			id: serializer[:data][:id]
+		}.merge(
+			serializer[:data][:attributes]
+		)
+  end
 end

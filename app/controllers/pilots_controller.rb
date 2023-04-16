@@ -1,30 +1,32 @@
 class PilotsController < ApplicationController
 	before_action :set_pilot, only: [:show, :update, :destroy]
-	rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
 	# GET All
 	def index
-		pilots = Pilot.all.map{|p| p.to_json }
+		pilots = Pilot.all.map{|p| p.dto_json }
 
 		render json: pilots, status: :ok
 	end
 
 	# GET com ID
 	def show
-		render json: @pilot.to_json, status: :ok
+		render json: @pilot.dto_json, status: :ok
 	end
 
 	# POST
 	def create
 		@pilot = Pilot.new(
-			id: params["id"],
 			name: params["name"],
 			password: params["password"]
 		)
 
+		@pilot.abble_to_fligh = params["abble_to_fligh"].map do |m|
+			Model.find_by(m.permit(m.keys).to_h)
+		end
+
 		@pilot.save
 
-		render json: @pilot.to_json, status: :ok
+		render json: @pilot.dto_json, status: :ok
 	rescue
 		render status: :bad_request
 	end
@@ -36,9 +38,13 @@ class PilotsController < ApplicationController
 			password: params["password"]
     )
 
+		@pilot.abble_to_fligh = params["abble_to_fligh"].map do |m|
+			Model.find_by(m.permit(m.keys).to_h)
+		end
+
 		@pilot.save
 			
-		render json: @pilot.to_json, status: :ok
+		render json: @pilot.dto_json, status: :ok
 	rescue
 		render status: :bad_request
 	end
@@ -47,7 +53,7 @@ class PilotsController < ApplicationController
 	def destroy
 		@pilot.destroy
 
-		render json: @pilot.to_json, status: :ok
+		render json: @pilot.dto_json, status: :ok
 	end
 
 	private
@@ -59,9 +65,5 @@ class PilotsController < ApplicationController
 		else
 			render status: :bad_request
 		end
-	end
-
-	def record_not_found
-		render json: {}, status: :not_found
 	end
 end

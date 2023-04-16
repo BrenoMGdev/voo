@@ -4,8 +4,6 @@ class CreatePilots < ActiveRecord::Migration[7.0]
       t.string :id, primary_key: true
       t.string :name
       t.string :password
-      
-      t.timestamps
     end
   end
 end

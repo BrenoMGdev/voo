@@ -1,20 +1,9 @@
 class Plane < ApplicationRecord
-	belongs_to :pilot
 	belongs_to :model
 
-	validate :id_validation, on: :update
-	validates_presence_of :id, :model_id, :pilot_id, :date, :registration
+	validates_presence_of :model_id, :manufacturing_date, :registration
 
-	def id_validation
-    self.class.find(self.id).blank?
+	def dto_json
+    ActiveModelSerializers::SerializableResource.new(self, each_serializer: PlaneSerializer).as_json[:data][:attributes]
   end
-
-	def to_json
-		{
-			id: self.id,
-			model: (self.model.present? ? self.model.to_json : nil),
-			date: self.date,
-			registration: self.registration
-		}
-	end
 end

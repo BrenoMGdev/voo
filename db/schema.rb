@@ -10,30 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_12_214425) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_14_023635) do
   create_table "models", id: :string, force: :cascade do |t|
-    t.string "model"
+    t.string "description"
     t.string "manufacturer"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  end
+
+  create_table "models_pilots", id: false, force: :cascade do |t|
+    t.string "pilot_id"
+    t.string "model_id"
+    t.index ["model_id"], name: "index_models_pilots_on_model_id"
+    t.index ["pilot_id"], name: "index_models_pilots_on_pilot_id"
   end
 
   create_table "pilots", id: :string, force: :cascade do |t|
     t.string "name"
     t.string "password"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
-  create_table "planes", id: :string, force: :cascade do |t|
-    t.string "pilot_id"
+  create_table "planes", primary_key: "registration", id: :string, force: :cascade do |t|
     t.string "model_id"
-    t.string "date"
-    t.string "registration"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.date "manufacturing_date"
     t.index ["model_id"], name: "index_planes_on_model_id"
-    t.index ["pilot_id"], name: "index_planes_on_pilot_id"
   end
 
 end

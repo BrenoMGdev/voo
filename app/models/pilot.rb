@@ -1,19 +1,24 @@
+require 'securerandom'
+
 class Pilot < ApplicationRecord
-	has_many :plane
+	has_and_belongs_to_many :model
+	has_and_belongs_to_many :abble_to_fligh, class_name: :Model
 
-	validate :id_validation, on: :update
-	validates_presence_of :id, :name, :password
+	validates_presence_of :name, :password
 
-	def id_validation
-    self.class.find(self.id).blank?
+	before_create :set_id
+
+	def set_id
+    self.id = SecureRandom.uuid
   end
 
-	def to_json
+	def dto_json
+    serializer = ActiveModelSerializers::SerializableResource.new(self, each_serializer: PilotSerializer).as_json
+
 		{
-			id: self.id,
-			name: self.name,
-			password: self.password,
-			planes: (self.plane.present? ? self.plane.map{|p| p.to_json } : [])
-		}
-	end
+			id: serializer[:data][:id]
+		}.merge(
+			serializer[:data][:attributes]
+		)
+  end
 end

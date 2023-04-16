@@ -1,32 +1,29 @@
 class PlanesController < ApplicationController
 	before_action :set_plane, only: [:show, :update, :destroy]
-	rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
 	# GET All
 	def index
-		planes = Plane.all.map{|p| p.to_json }
+		planes = Plane.all.map{|p| p.dto_json }
 
 		render json: planes, status: :ok
 	end
 
 	# GET com ID
 	def show
-		render json: @plane.to_json, status: :ok
+		render json: @plane.dto_json, status: :ok
 	end
 
 	# POST
 	def create
 		@plane = Plane.new(
-			id: params["id"],
+			registration: params["registration"],
 			model_id: params["model_id"],
-			pilot_id: params["pilot_id"],
-			date: params["date"],
-			registration: params["registration"]
+			manufacturing_date: params["manufacturing_date"]
 		)
-
+		
 		@plane.save
 		
-		render json: @plane.to_json, status: :ok
+		render json: @plane.dto_json, status: :ok
 	rescue
 		render status: :bad_request
 	end
@@ -34,13 +31,12 @@ class PlanesController < ApplicationController
 	# PUT e PATCH
 	def update
 		@plane.update(
+			registration: params["registration"],
 			model_id: params["model_id"],
-			pilot_id: params["pilot_id"],
-			date: params["date"],
-			registration: params["registration"]
-    )
+			manufacturing_date: params["manufacturing_date"]
+		)
 			
-		render json: @plane.to_json, status: :ok
+		render json: @plane.dto_json, status: :ok
 	rescue
 		render status: :bad_request
 	end
@@ -49,21 +45,17 @@ class PlanesController < ApplicationController
 	def destroy
 		@plane.destroy
 
-		render json: @plane.to_json, status: :ok
+		render json: @plane.dto_json, status: :ok
 	end
 
 	private
 	def set_plane
-		plane_id = params[:id]
+		plane_registration = params[:registration]
 
-		if plane_id.present?
-			@pilot = Plane.find(plane_id)
+		if plane_registration.present?
+			@plane = Plane.find(plane_registration)
 		else
 			render status: :bad_request
 		end
-	end
-
-	def record_not_found
-		render json: {}, status: :not_found
 	end
 end
