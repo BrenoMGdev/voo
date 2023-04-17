@@ -5,6 +5,6 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   resources :pilots 
-  resources :planes
+  resources :planes, param: :registration
   resources :models
 end
