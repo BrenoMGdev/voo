@@ -15,9 +15,12 @@ class PlanesController < ApplicationController
 
 	# POST
 	def create
+		model = params["model"]
+		model = Model.find_by(model.permit(model.keys).to_h)
+
 		@plane = Plane.new(
 			registration: params["registration"],
-			model_id: params["model_id"],
+			model: model,
 			manufacturing_date: params["manufacturing_date"]
 		)
 		
@@ -30,9 +33,11 @@ class PlanesController < ApplicationController
 
 	# PUT e PATCH
 	def update
+		model = params["model"]
+		model = Model.find_by(model.permit(model.keys).to_h)
+
 		@plane.update(
-			registration: params["registration"],
-			model_id: params["model_id"],
+			model: model,
 			manufacturing_date: params["manufacturing_date"]
 		)
 			
