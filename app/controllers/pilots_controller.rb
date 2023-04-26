@@ -15,14 +15,15 @@ class PilotsController < ApplicationController
 
 	# POST
 	def create
+		abble_to_fligh = params["abble_to_fligh"].map do |m|
+			Model.find_by(m.to_enum.to_h)
+		end
+
 		@pilot = Pilot.new(
 			name: params["name"],
-			password: params["password"]
+			password: params["password"],
+			abble_to_fligh: abble_to_fligh
 		)
-
-		@pilot.abble_to_fligh = params["abble_to_fligh"].map do |m|
-			Model.find_by(m.permit(m.keys).to_h)
-		end
 
 		@pilot.save
 
@@ -33,16 +34,15 @@ class PilotsController < ApplicationController
 
 	# PUT e PATCH
 	def update
-		@pilot.update(
-			name: params["name"],
-			password: params["password"]
-    )
-
-		@pilot.abble_to_fligh = params["abble_to_fligh"].map do |m|
-			Model.find_by(m.permit(m.keys).to_h)
+		abble_to_fligh = params["abble_to_fligh"].map do |m|
+			Model.find_by(m.to_enum.to_h)
 		end
 
-		@pilot.save
+		@pilot.update(
+			name: params["name"],
+			password: params["password"],
+			abble_to_fligh: abble_to_fligh
+    )
 			
 		render json: @pilot.dto_json, status: :ok
 	rescue

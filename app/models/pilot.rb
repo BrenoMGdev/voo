@@ -1,6 +1,8 @@
 require 'securerandom'
 
 class Pilot < ApplicationRecord
+	has_many :flight_schedule
+	
 	has_and_belongs_to_many :model
 	has_and_belongs_to_many :abble_to_fligh, class_name: :Model
 

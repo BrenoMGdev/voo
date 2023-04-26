@@ -3,7 +3,7 @@ class ModelsController < ApplicationController
 
 	# GET All
 	def index
-		models = Model.all.map{|p| p.dto_json }
+		models = Model.all.map{|m| m.dto_json }
 
 		render json: models, status: :ok
 	end

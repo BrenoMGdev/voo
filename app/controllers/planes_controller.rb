@@ -16,7 +16,7 @@ class PlanesController < ApplicationController
 	# POST
 	def create
 		model = params["model"]
-		model = Model.find_by(model.permit(model.keys).to_h)
+		model = Model.find_by(model.to_enum.to_h)
 
 		@plane = Plane.new(
 			registration: params["registration"],
@@ -34,7 +34,7 @@ class PlanesController < ApplicationController
 	# PUT e PATCH
 	def update
 		model = params["model"]
-		model = Model.find_by(model.permit(model.keys).to_h)
+		model = Model.find_by(model.to_enum.to_h)
 
 		@plane.update(
 			model: model,

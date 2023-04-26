@@ -7,4 +7,7 @@ Rails.application.routes.draw do
   resources :pilots 
   resources :planes, param: :registration
   resources :models
+  resources :airports, param: :icao
+  resources :flights, param: :flight_number
+  resources :flight_schedules, :path => "flightSchedules"
 end

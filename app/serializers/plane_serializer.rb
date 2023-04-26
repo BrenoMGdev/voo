@@ -8,4 +8,8 @@ class PlaneSerializer < ActiveModel::Serializer
       "manufacturer"
     )
   end
+
+  def manufacturing_date
+		object.manufacturing_date.strftime("%d/%m/%Y")
+	end
 end
