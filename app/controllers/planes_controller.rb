@@ -15,8 +15,7 @@ class PlanesController < ApplicationController
 
 	# POST
 	def create
-		model = params["model"]
-		model = Model.find_by(model.to_enum.to_h)
+		model = Model.find(params["model"].try(:[], "id")) if params["model"].present?
 
 		@plane = Plane.new(
 			registration: params["registration"],
@@ -33,8 +32,7 @@ class PlanesController < ApplicationController
 
 	# PUT e PATCH
 	def update
-		model = params["model"]
-		model = Model.find_by(model.to_enum.to_h)
+		model = Model.find(params["model"].try(:[], "id")) if params["model"].present?
 
 		@plane.update(
 			model: model,

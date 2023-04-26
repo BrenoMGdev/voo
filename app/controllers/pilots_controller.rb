@@ -16,7 +16,7 @@ class PilotsController < ApplicationController
 	# POST
 	def create
 		abble_to_fligh = params["abble_to_fligh"].map do |m|
-			Model.find_by(m.to_enum.to_h)
+			Model.find(m.try(:[], "id"))
 		end
 
 		@pilot = Pilot.new(
@@ -35,7 +35,7 @@ class PilotsController < ApplicationController
 	# PUT e PATCH
 	def update
 		abble_to_fligh = params["abble_to_fligh"].map do |m|
-			Model.find_by(m.to_enum.to_h)
+			Model.find(m.try(:[], "id"))
 		end
 
 		@pilot.update(
@@ -51,9 +51,13 @@ class PilotsController < ApplicationController
 
 	# DELETE
 	def destroy
-		@pilot.destroy
+		if @pilot.flight_schedule.blank?
+			@pilot.destroy
 
-		render json: @pilot.dto_json, status: :ok
+			render json: @pilot.dto_json, status: :ok
+		end
+
+		render status: :bad_request
 	end
 
 	private

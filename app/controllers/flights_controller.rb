@@ -3,7 +3,18 @@ class FlightsController < ApplicationController
 
 	# GET All
 	def index
-		flights = Flight.all.map{|f| f.dto_json }
+		where = ["1=1"]
+
+		where << "sources.icao = '#{ params["source"] }'" if params["source"].present?
+		where << "destinations.icao = '#{ params["destination"] }'" if params["destination"].present?
+
+		flights = Flight
+			.joins("
+				INNER JOIN airports sources ON sources.icao = flights.source_icao
+				INNER JOIN airports destinations ON destinations.icao = flights.destination_icao
+			")
+			.where(where.join(" AND "))
+			.map{|f| f.dto_json }
 
 		render json: flights, status: :ok
 	end
@@ -15,35 +26,10 @@ class FlightsController < ApplicationController
 
 	# POST
 	def create
-		plane = Plane.find_by(params["plane"].to_enum.to_h) if params["plane"].present?
+		plane = Plane.find(params["plane"].try(:[], "registration")) if params["plane"].present?
+		source_airport = Airport.find(params["source"].try(:[], "icao")) if params["source"].present?
+		destination_airport = Airport.find(params["destination"].try(:[], "icao")) if params["destination"].present?
 
-		if params["source"].present?
-			location = params["source"]["location"]
-
-			source_airport = params["source"].to_enum.to_h
-
-			source_airport.reject!{|k| k == "location" }
-			source_airport.merge!({
-				"latitude" => location.try(:[], 0),
-				"longitude" => location.try(:[], 1)
-			})
-
-			source_airport = Airport.find_by(source_airport)
-		end
-
-		if params["destination"].present?
-			location = params["destination"]["location"]
-
-			destination_airport = params["destination"].to_enum.to_h
-
-			destination_airport.reject!{|k| k == "location" }
-			destination_airport.merge!({
-				"latitude" => location.try(:[], 0),
-				"longitude" => location.try(:[], 1)
-			})
-
-			destination_airport = Airport.find_by(destination_airport)
-		end
 
 		if params["days_of_week"].present?
 			days_of_week = params["days_of_week"].map do |day_of_week|
@@ -80,35 +66,9 @@ class FlightsController < ApplicationController
 
 	# PUT e PATCH
 	def update
-		plane = Plane.find_by(params["plane"].to_enum.to_h) if params["plane"].present?
-		
-		if params["source"].present?
-			location = params["source"]["location"]
-
-			source_airport = params["source"].to_enum.to_h
-
-			source_airport.reject!{|k| k == "location" }
-			source_airport.merge!({
-				"latitude" => location.try(:[], 0),
-				"longitude" => location.try(:[], 1)
-			})
-
-			source_airport = Airport.find_by(source_airport)
-		end
-
-		if params["destination"].present?
-			location = params["destination"]["location"]
-
-			destination_airport = params["destination"].to_enum.to_h
-
-			destination_airport.reject!{|k| k == "location" }
-			destination_airport.merge!({
-				"latitude" => location.try(:[], 0),
-				"longitude" => location.try(:[], 1)
-			})
-
-			destination_airport = Airport.find_by(destination_airport)
-		end
+		plane = Plane.find(params["plane"].try(:[], "registration")) if params["plane"].present?
+		source_airport = Airport.find(params["source"].try(:[], "icao")) if params["source"].present?
+		destination_airport = Airport.find(params["destination"].try(:[], "icao")) if params["destination"].present?
 
 		if params["days_of_week"].present?
 			days_of_week = params["days_of_week"].map do |day_of_week|
@@ -142,9 +102,13 @@ class FlightsController < ApplicationController
 
 	# DELETE
 	def destroy
-		@flight.destroy
+		if @flight.flight_schedule.blank?
+			@flight.destroy
 
-		render json: @flight.dto_json, status: :ok
+			render json: @flight.dto_json, status: :ok
+		end
+
+		render status: :bad_request
 	end
 
 	private

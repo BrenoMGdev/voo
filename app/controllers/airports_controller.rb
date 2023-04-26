@@ -44,9 +44,13 @@ class AirportsController < ApplicationController
 
 	# DELETE
 	def destroy
-		@airport.destroy
+		if @airport.flights_source.blank? && @airport.flights_destination.blank?
+			@airport.destroy
 
-		render json: @airport.dto_json, status: :ok
+			render json: @airport.dto_json, status: :ok
+		end
+
+		render status: :bad_request
 	end
 
 	private

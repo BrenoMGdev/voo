@@ -48,7 +48,7 @@ class ModelsController < ApplicationController
 			return
 		end
 
-		render json: { message: "This Model has Planes associated." }, status: :bad_request
+		render status: :bad_request
 	end
 
 	private

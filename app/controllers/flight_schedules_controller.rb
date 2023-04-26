@@ -40,8 +40,8 @@ class FlightSchedulesController < ApplicationController
 
 	# POST
 	def create
-		flight = Flight.find_by(params["flight"].to_enum.to_h) if params["flight"].present?
-		pilot = Pilot.find_by(params["pilot"].to_enum.to_h) if params["pilot"].present?
+		flight = Flight.find(params["flight"].try(:[], "flight_number")) if params["flight"].present?
+		pilot = Pilot.find(params["pilot"].try(:[], "id")) if params["pilot"].present?
 
 		@flight_schedule = FlightSchedule.new(
 			flight: flight,
@@ -58,8 +58,8 @@ class FlightSchedulesController < ApplicationController
 
 	# PUT e PATCH
 	def update
-		flight = Flight.find_by(params["flight"].to_enum.to_h) if params["flight"].present?
-		pilot = Pilot.find_by(params["pilot"].to_enum.to_h) if params["pilot"].present?
+		flight = Flight.find(params["flight"].try(:[], "flight_number")) if params["flight"].present?
+		pilot = Pilot.find(params["pilot"].try(:[], "id")) if params["pilot"].present?
 
 		@flight_schedule.update(
 			flight: flight,
