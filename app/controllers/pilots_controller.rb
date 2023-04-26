@@ -55,6 +55,7 @@ class PilotsController < ApplicationController
 			@pilot.destroy
 
 			render json: @pilot.dto_json, status: :ok
+			return
 		end
 
 		render status: :bad_request

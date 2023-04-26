@@ -106,6 +106,7 @@ class FlightsController < ApplicationController
 			@flight.destroy
 
 			render json: @flight.dto_json, status: :ok
+			return
 		end
 
 		render status: :bad_request

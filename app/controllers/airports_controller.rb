@@ -48,6 +48,7 @@ class AirportsController < ApplicationController
 			@airport.destroy
 
 			render json: @airport.dto_json, status: :ok
+			return
 		end
 
 		render status: :bad_request
