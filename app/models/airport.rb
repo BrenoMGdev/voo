@@ -4,6 +4,8 @@ class Airport < ApplicationRecord
 
 	validates_presence_of :icao, :name, :latitude, :longitude, :altitude
 
+	validates_uniqueness_of :icao, :name
+
 	attr_accessor :location
 
 	before_validation :convert_location

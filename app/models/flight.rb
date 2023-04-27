@@ -12,6 +12,8 @@ class Flight < ApplicationRecord
 
 	validates_presence_of :flight_number, :plane_id, :source_icao, :destination_icao
 
+	validates_uniqueness_of :flight_number
+
 	def dto_json
     ActiveModelSerializers::SerializableResource.new(self, each_serializer: FlightSerializer).as_json[:data][:attributes]
   end

@@ -58,6 +58,10 @@ class FlightSchedulesController < ApplicationController
 			date: params["date"]
 		)
 
+		if not @flight_schedule.valid?
+			raise
+		end
+
 		@flight_schedule.save
 
 		render json: @flight_schedule.dto_json, status: :ok

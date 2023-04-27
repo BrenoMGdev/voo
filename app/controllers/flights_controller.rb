@@ -57,6 +57,10 @@ class FlightsController < ApplicationController
 			tile_lenght: params["tile_lenght"]
 		)
 
+		if not @flight.valid?
+			raise
+		end
+
 		@flight.save
 
 		render json: @flight.dto_json, status: :ok

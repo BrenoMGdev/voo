@@ -22,6 +22,10 @@ class PlanesController < ApplicationController
 			model: model,
 			manufacturing_date: params["manufacturing_date"]
 		)
+
+		if not @plane.valid?
+			raise
+		end
 		
 		@plane.save
 		

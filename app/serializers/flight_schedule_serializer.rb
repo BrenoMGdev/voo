@@ -10,6 +10,6 @@ class FlightScheduleSerializer < ActiveModel::Serializer
 	end
 
 	def date
-		object.date.strftime("%d/%m/%Y %H:%M")
+		object.date.strftime("%Y-%m-%dT%H:%MZ")
 	end
 end

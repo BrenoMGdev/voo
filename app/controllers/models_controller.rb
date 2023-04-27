@@ -20,6 +20,10 @@ class ModelsController < ApplicationController
 			manufacturer: params["manufacturer"]
 		)
 
+		if not @model.valid?
+			raise
+		end
+
 		@model.save
 		
 		render json: @model.dto_json, status: :ok

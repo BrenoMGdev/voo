@@ -22,6 +22,10 @@ class AirportsController < ApplicationController
 			altitude: params["altitude"]
 		)
 
+		if not @airport.valid?
+			raise
+		end
+
 		@airport.save
 
 		render json: @airport.dto_json, status: :ok

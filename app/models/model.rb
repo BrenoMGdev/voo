@@ -6,6 +6,8 @@ class Model < ApplicationRecord
 
   validates_presence_of :description, :manufacturer
 
+  validates_uniqueness_of :description
+
   before_create :set_id
 
   def set_id

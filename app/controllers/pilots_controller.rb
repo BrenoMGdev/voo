@@ -25,6 +25,10 @@ class PilotsController < ApplicationController
 			abble_to_fligh: abble_to_fligh
 		)
 
+		if not @pilot.valid?
+			raise
+		end
+
 		@pilot.save
 
 		render json: @pilot.dto_json, status: :ok
