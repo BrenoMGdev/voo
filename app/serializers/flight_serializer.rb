@@ -18,6 +18,6 @@ class FlightSerializer < ActiveModel::Serializer
 	end
 
 	def times
-		object.available_time.map{|t| t.description.strftime("%Y-%m-%dT%H:%M.00Z") }
+		object.available_time.map{|t| t.description.strftime("%H:%M") }
 	end
 end
