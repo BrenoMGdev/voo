@@ -1,6 +1,6 @@
 class Airport < ApplicationRecord
-	has_many :flights_source, class_name: 'Flight', foreign_key: :source_id
-	has_many :flights_destination, class_name: 'Flight', foreign_key: :destination_id
+	has_many :flights_source, class_name: 'Flight', foreign_key: 'source_icao'
+	has_many :flights_destination, class_name: 'Flight', foreign_key: 'destination_icao'
 
 	validates_presence_of :icao, :name, :latitude, :longitude, :altitude
 
