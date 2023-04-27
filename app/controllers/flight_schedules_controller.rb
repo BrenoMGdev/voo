@@ -10,8 +10,17 @@ class FlightSchedulesController < ApplicationController
 
 		date = DateTime.parse(params["date"]) if params["date"].present?
 		if date.present?
-			where << "flight_schedules.date >= '#{ date - params["range_start"].to_i.days }'" if params["range_start"].present?
-			where << "flight_schedules.date <= '#{ date + params["range_end"].to_i.days }'" if params["range_end"].present?
+			if params["range_start"].blank?
+				where << "flight_schedules.date >= '#{ date.strftime("%Y-%m-%d 00:00:00") }'" if params["range_start"].present?
+			else
+				where << "flight_schedules.date >= '#{ (date - params["range_start"].to_i.days).strftime("%Y-%m-%d 00:00:00") }'"
+			end
+
+			if params["range_end"].blank?
+				where << "flight_schedules.date <= '#{ date.strftime("%Y-%m-%d 23:59:59")  }'" if params["range_end"].present?
+			else
+				where << "flight_schedules.date <= '#{ (date + params["range_end"].to_i.days).strftime("%Y-%m-%d 23:59:59") }'"
+			end
 		end
 
 		where << "pilots.id = '#{ params["pilot"] }'" if params["pilot"].present?
