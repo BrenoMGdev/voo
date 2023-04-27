@@ -10,6 +10,6 @@ class PlaneSerializer < ActiveModel::Serializer
   end
 
   def manufacturing_date
-		object.manufacturing_date.strftime("%Y-%m-%dT%H:%MZ")
+		object.manufacturing_date.strftime("%Y-%m-%dT%H:%M.00Z")
 	end
 end
