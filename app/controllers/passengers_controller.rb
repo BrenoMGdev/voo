@@ -1,39 +1,55 @@
 class PassengersController < ApplicationController
-    before_action :set_passenger, only: [:show, :update, :destroy]
+  before_action :set_passenger, only: [:show, :update, :destroy]
 
-    def index
-      passengers = Passenger.all
+  def index
+    where = ["1=1"]
 
-      render json: passengers, status: :ok
-    end
+		where << "cpf = '#{ params["cpf"] }'" if params["cpf"].present?
+		where << "name = '#{ params["name"] }'" if params["name"].present?
+    where << "surname = '#{ params["surname"] }'" if params["surname"].present?
+
+		passengers = Passenger
+			.where(where.join(" AND "))
+			.map{|p| p.dto_json }
+
+    render json: passengers, status: :ok
+  end
   
 	def show
-		render json: @passenger, status: :ok
+		render json: @passenger.dto_json, status: :ok
 	end
-  
-    def new
-      @passenger = Passenger.new
-    end
-  
-    def create
-      @passenger = Passenger.new(passenger_params)
-  
-      if @passenger.save
-        redirect_to @passenger
-      else
-        render 'new'
-      end
-    end  
-  
-    def update
+
+  def create
+    @passenger = Passenger.new(
+			cpf: params["cpf"],
+			passport: params["passport"],
+      country: params["country"],
+      name: params["name"],
+      surname: params["surname"],
+      password: params["password"],
+      miles: params["miles"]
+		)
+
+    if not @passenger.valid?
+			raise
+		end
+
+		@passenger.save
+		
+		render json: @passenger.dto_json, status: :ok
+	rescue
+		render status: :bad_request
+	end
+
+  def update
 		@passenger.update(
 			cpf: params["cpf"],
 			passport: params["passport"],
-            country: params["country"],
-            name: params["name"],
-            surname: params["surname"],
-            password: params["password"],
-            miles: params["miles"],
+      country: params["country"],
+      name: params["name"],
+      surname: params["surname"],
+      password: params["password"],
+      miles: params["miles"]
 		)
 
 		render json: @passenger, status: :ok
@@ -44,22 +60,18 @@ class PassengersController < ApplicationController
 	# DELETE
 	def destroy
 		@passenger.destroy
+
 		render json: @passenger, status: :ok
 	end
   
-    private
-      def passenger_params
-        params.require(:passenger).permit(:cpf, :passport, :country, :name, :surname, :password, :miles)
-      end
+  private
+  def set_passenger
+    passenger_id = params[:id]
 
-    private
-      def set_passenger
-		passenger_id = params[:id]
-
-		if passenger_id.present?
-			@passenger = Passenger.find(passenger_id)
-		else
-			render status: :bad_request
-		end
+    if passenger_id.present?
+      @passenger = Passenger.find(passenger_id)
+    else
+      render status: :bad_request
+    end
 	end
-  end
+end

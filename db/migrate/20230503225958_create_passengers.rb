@@ -1,6 +1,7 @@
 class CreatePassengers < ActiveRecord::Migration[7.0]
   def change
-    create_table :passengers do |t|
+    create_table :passengers, id: false do |t|
+      t.string :id, primary_key: true
       t.string :cpf
       t.string :passport
       t.string :country
