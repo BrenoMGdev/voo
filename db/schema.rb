@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_26_023436) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_03_225958) do
   create_table "airports", primary_key: "icao", id: :string, force: :cascade do |t|
     t.string "name"
     t.float "latitude"
@@ -66,6 +66,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_26_023436) do
     t.string "model_id"
     t.index ["model_id"], name: "index_models_pilots_on_model_id"
     t.index ["pilot_id"], name: "index_models_pilots_on_pilot_id"
+  end
+
+  create_table "passengers", force: :cascade do |t|
+    t.string "cpf"
+    t.string "passport"
+    t.string "country"
+    t.string "name"
+    t.string "surname"
+    t.string "password"
+    t.integer "miles", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "pilots", id: :string, force: :cascade do |t|

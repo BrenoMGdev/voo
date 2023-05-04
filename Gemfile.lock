@@ -79,17 +79,11 @@ GEM
     concurrent-ruby (1.2.2)
     crass (1.0.6)
     date (3.3.3)
-    debug (1.7.2)
-      irb (>= 1.5.0)
-      reline (>= 0.3.1)
     erubi (1.12.0)
     globalid (1.1.0)
       activesupport (>= 5.0)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
-    io-console (0.6.0)
-    irb (1.6.3)
-      reline (>= 0.3.0)
     jsonapi-renderer (0.2.2)
     loofah (2.19.1)
       crass (~> 1.0.2)
@@ -117,6 +111,8 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.14.2)
       mini_portile2 (~> 2.8.0)
+      racc (~> 1.4)
+    nokogiri (1.14.2-x64-mingw-ucrt)
       racc (~> 1.4)
     nokogiri (1.14.2-x64-mingw32)
       racc (~> 1.4)
@@ -157,10 +153,9 @@ GEM
       thor (~> 1.0)
       zeitwerk (~> 2.5)
     rake (13.0.6)
-    reline (0.3.3)
-      io-console (~> 0.5)
     sqlite3 (1.6.2)
       mini_portile2 (~> 2.8.0)
+    sqlite3 (1.6.2-x64-mingw-ucrt)
     sqlite3 (1.6.2-x64-mingw32)
     sqlite3 (1.6.2-x86_64-linux)
     thor (1.2.1)
@@ -176,13 +171,13 @@ GEM
 
 PLATFORMS
   ruby
+  x64-mingw-ucrt
   x64-mingw32
   x86_64-linux
 
 DEPENDENCIES
   active_model_serializers (~> 0.10.0)
   bootsnap
-  debug
   puma (~> 5.0)
   rack-cors
   rails (~> 7.0.4, >= 7.0.4.3)
