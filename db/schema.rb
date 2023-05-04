@@ -68,7 +68,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_03_225958) do
     t.index ["pilot_id"], name: "index_models_pilots_on_pilot_id"
   end
 
-  create_table "passengers", force: :cascade do |t|
+  create_table "passengers", id: :string, force: :cascade do |t|
     t.string "cpf"
     t.string "passport"
     t.string "country"
